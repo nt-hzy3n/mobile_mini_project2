@@ -10,7 +10,7 @@
 * **Team Members:**
   1. Nguyễn Thị Huyền — Student ID: 23IT110 — Role: [Full-stack Mobile Developer / Architecture & Logic] — Contribution: [100%]
 * **🔗 Live Demo URL:** [Expo Snack / Expo Go Link hoặc Link tải file APK]
-* **💻 GitHub Repository:** [https://github.com/username/mini_Pr2]
+* **💻 GitHub Repository:** [https://github.com/nt-hzy3n/mobile_mini_project2](https://github.com/nt-hzy3n/mobile_mini_project2)
 * **🎥 Video Demo (Optional):** [Link video YouTube / Google Drive demo app]
 
 ---
