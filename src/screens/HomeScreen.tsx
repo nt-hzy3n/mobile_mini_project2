@@ -7,7 +7,6 @@ import {
   Animated,
   FlatList,
   Image,
-  SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
@@ -15,6 +14,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const localAvatar = require('../../assets/avatar.jpg');
 import { EmptyState } from '../components/EmptyState';
