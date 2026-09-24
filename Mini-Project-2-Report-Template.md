@@ -8,8 +8,8 @@
 
 ## 1. GENERAL INFORMATION & DELIVERABLE LINKS
 * **Team Members:**
-  1. Nguyễn Thị Huyền — Student ID: 23IT110 — Role: [Full-stack Mobile Developer / Architecture & Logic] — Contribution: [100%]
-* **🔗 Live Demo URL:** [Expo Snack / Expo Go Link hoặc Link tải file APK]
+  1. Nguyễn Thị Huyền — Student ID: 23IT110 — Role: Full-stack Mobile Developer / Architecture & Logic — Contribution: 100%
+* **🔗 Link tải file APK (Cài đặt trực tiếp):** [Tải file VKU_Study_Room_Booking.apk](https://expo.dev/artifacts/eas/lj78UIujZxcexOF8DWru5iWYec52pM92MdC714R7w8A.apk) | [Trang Quản lý Build Expo](https://expo.dev/accounts/nthuyen23it110/projects/vku-study-room-booking/builds/f3c83bb1-51cd-4995-bd4c-b25fbb43ee69)
 * **💻 GitHub Repository:** [https://github.com/nt-hzy3n/mobile_mini_project2](https://github.com/nt-hzy3n/mobile_mini_project2)
 * **🎥 Video Demo (Optional):** [Link video YouTube / Google Drive demo app]
 
