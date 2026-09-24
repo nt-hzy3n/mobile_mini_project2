@@ -7,7 +7,7 @@ export const DEFAULT_STUDENT: UserProfile = {
   name: 'Nguyễn Thị Huyền',
   studentId: '23IT110',
   email: 'huyennt.23it@vku.udn.vn',
-  major: 'Kỹ thuật Phần mềm',
+  major: 'Công nghệ Phần mềm',
   classGroup: '23SE1 - VKU',
   avatarUrl: '',
 };
