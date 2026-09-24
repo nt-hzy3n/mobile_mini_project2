@@ -82,16 +82,30 @@ mini_Pr2/
      </p>
 
 2. **Màn hình Chọn Lịch 7 Ngày & Chọn Khung Giờ (Booking Screen):**
-   - *Mô tả:* Thanh cuộn ngang 7 ngày tiếp theo bằng tiếng Việt. 4 khung giờ cố định; khung giờ nào đã có người đặt trước sẽ tự động bị vô hiệu hóa (disabled) và hiển thị nhãn "Đã được đặt".
-   - *Ảnh minh chứng:* `[Dán ảnh chụp màn hình BookingScreen tại đây]`
+   - *Mô tả:* Thanh cuộn ngang 7 ngày tiếp theo bằng tiếng Việt. 4 khung giờ cố định; hiển thị rõ trạng thái từng khung giờ ("Đang chọn", "Có thể đặt", hoặc "Đã được đặt"). Có màn hình xác nhận thông tin sinh viên Nguyễn Thị Huyền (23IT110) trước khi đặt.
+   - *Ảnh minh chứng:*
+
+     <p align="center">
+       <img src="assets/screenshots/booking_screen.png" alt="Màn hình Chọn Lịch & Khung Giờ - Nguyễn Thị Huyền" width="340" />
+       &nbsp;&nbsp;
+       <img src="assets/screenshots/booking_confirm.png" alt="Màn hình Xác nhận Đặt phòng - Nguyễn Thị Huyền" width="340" />
+     </p>
 
 3. **Thẻ Vé QR Check-in Điện Tử (QR Booking Pass):**
-   - *Mô tả:* Thẻ vé sinh viên VKU chuyên nghiệp hiển thị đầy đủ phòng, vị trí, ngày, khung giờ, người đặt và mã QR vector để quét check-in tại cửa phòng.
-   - *Ảnh minh chứng:* `[Dán ảnh chụp màn hình QR Booking Pass tại đây]`
+   - *Mô tả:* Thẻ vé sinh viên VKU chuyên nghiệp hiển thị đầy đủ phòng (Phòng B101 - Tòa B), ngày, khung giờ, người đặt (Nguyễn Thị Huyền - 23IT110) và mã QR vector `VKU-PHÒNGB101-2609-G5B4` kèm hiệu ứng hoàn thành để quét check-in tại cửa phòng.
+   - *Ảnh minh chứng:*
 
-4. **Quản lý Lịch Đặt (My Bookings) & Hộp thoại Hủy Đặt Phòng:**
-   - *Mô tả:* Danh sách phân theo 3 tab "Sắp tới", "Đã hoàn thành", "Đã hủy". Nút hủy phòng kèm dialog xác nhận an toàn `[Quay lại] / [Hủy đặt phòng]`.
-   - *Ảnh minh chứng:* `[Dán ảnh chụp màn hình My Bookings & Cancel Dialog tại đây]`
+     <p align="center">
+       <img src="assets/screenshots/qr_pass.png" alt="Thẻ vé QR Check-in Điện Tử - Nguyễn Thị Huyền" width="360" />
+     </p>
+
+4. **Quản lý Lịch Đặt (My Bookings) & Trạng thái Lịch học:**
+   - *Mô tả:* Danh sách phân theo 3 tab "Sắp tới", "Đã hoàn thành", "Đã hủy". Giao diện EmptyState trực quan hướng dẫn sinh viên đặt phòng ngay.
+   - *Ảnh minh chứng:*
+
+     <p align="center">
+       <img src="assets/screenshots/my_bookings.png" alt="Quản lý Lịch Đặt (My Bookings) - Nguyễn Thị Huyền" width="360" />
+     </p>
 
 ---
 
