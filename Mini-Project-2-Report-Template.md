@@ -75,7 +75,11 @@ mini_Pr2/
 
 1. **Màn hình Khám phá Phòng học (Home) & Bộ lọc đa tiêu chí:**
    - *Mô tả:* Hiển thị danh sách 16 phòng với ảnh HD, thông tin tòa, sức chứa, thiết bị và trạng thái "Đang trống" / "Đang được sử dụng". Thanh tìm kiếm tức thì và bộ lọc Tòa nhà + Sức chứa + Thiết bị.
-   - *Ảnh minh chứng:* `[Dán ảnh chụp màn hình Home & Filter tại đây]`
+   - *Ảnh minh chứng:*
+
+     <p align="center">
+       <img src="assets/screenshots/home_screen.png" alt="Màn hình Khám phá Phòng học (Home) - Nguyễn Thị Huyền" width="360" />
+     </p>
 
 2. **Màn hình Chọn Lịch 7 Ngày & Chọn Khung Giờ (Booking Screen):**
    - *Mô tả:* Thanh cuộn ngang 7 ngày tiếp theo bằng tiếng Việt. 4 khung giờ cố định; khung giờ nào đã có người đặt trước sẽ tự động bị vô hiệu hóa (disabled) và hiển thị nhãn "Đã được đặt".
