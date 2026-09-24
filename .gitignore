@@ -19,6 +19,7 @@ expo-env.d.ts
 *.mobileprovision
 
 # Metro
+*.apk
 .metro-health-check*
 
 # debug
