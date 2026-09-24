@@ -137,7 +137,9 @@ export const MyBookingsScreen: React.FC = () => {
             actionText={activeTab === 'upcoming' ? 'Đặt phòng ngay' : undefined}
             onAction={
               activeTab === 'upcoming'
-                ? () => navigation.navigate('MainTabs')
+                ? () => {
+                    (navigation as any).navigate('HomeTab');
+                  }
                 : undefined
             }
           />
