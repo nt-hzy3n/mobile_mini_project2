@@ -1,8 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
+  Animated,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -22,6 +23,26 @@ export const BookingSuccessScreen: React.FC = () => {
   const route = useRoute<BookingSuccessRouteProp>();
   const navigation = useNavigation<NavigationProp>();
   const { booking } = route.params;
+
+  // Success icon bounce animation
+  const scaleAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.sequence([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        friction: 4,
+        tension: 80,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [scaleAnim, fadeAnim]);
 
   const handleGoToMyBookings = () => {
     // Chuyển hướng sang Tab "Lịch đặt phòng"
@@ -45,15 +66,15 @@ export const BookingSuccessScreen: React.FC = () => {
 
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         {/* Biểu tượng thành công */}
-        <View style={styles.successHeader}>
-          <View style={styles.iconCircle}>
+        <Animated.View style={[styles.successHeader, { opacity: fadeAnim }]}>
+          <Animated.View style={[styles.iconCircle, { transform: [{ scale: scaleAnim }] }]}>
             <Ionicons name="checkmark-circle" size={64} color={THEME.colors.success} />
-          </View>
+          </Animated.View>
           <Text style={styles.successTitle}>Đặt phòng thành công!</Text>
           <Text style={styles.successSubtitle}>
             Thông tin đặt phòng đã được ghi nhận. Vui lòng lưu lại mã vé hoặc chụp màn hình mã QR để làm thủ tục check-in.
           </Text>
-        </View>
+        </Animated.View>
 
         {/* Thẻ vé QR Booking Pass */}
         <QRBookingPass booking={booking} />

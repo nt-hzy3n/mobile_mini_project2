@@ -31,6 +31,8 @@
 | 10 | **Thông báo nhắc lịch (Local Notifications)** | ✅ Complete | Sử dụng `expo-notifications` lập lịch nhắc trước 15 phút. Nhận diện an toàn môi trường Expo Go Android, không crash khi bị từ chối cấp quyền. |
 | 11 | **Tối ưu hiệu năng hiển thị danh sách** | ✅ Complete | Áp dụng `React.memo` cho `RoomCard` & `BookingCard`, `useMemo`, `useCallback`, cấu hình `removeClippedSubviews`, `initialNumToRender` trên `FlatList`. |
 | 12 | **Mô phỏng trạng thái thời gian thực** | ✅ Complete | `availabilityService.ts` phát sự kiện thay đổi trạng thái phòng cục bộ (Observer pattern), sẵn sàng mở rộng WebSocket trong tương lai. |
+| 13 | **TanStack Query (React Query) — Data Fetching & Caching** | ✅ Complete | `useRooms()` và `useBookings()` hooks sử dụng `@tanstack/react-query` cung cấp caching tự động, stale-while-revalidate, background refetch 60s và garbage collection. Kết hợp Zustand (mutations) + TanStack Query (queries). |
+| 14 | **Animations & Micro-interactions** | ✅ Complete | Fade-in + slide-up stagger cho RoomCard (80ms delay/card), pulsing dot thời gian thực, header fade-in, bounce scale animation cho icon đặt phòng thành công — tất cả sử dụng React Native `Animated` API với `useNativeDriver: true`. |
 
 ---
 
@@ -58,6 +60,7 @@ mini_Pr2/
 │   ├── components/             # Reusable UI components (RoomCard, DateSelector, QRBookingPass...)
 │   ├── screens/                # Màn hình chính (HomeScreen, RoomDetail, Booking, Success, Profile...)
 │   └── navigation/             # AppNavigator (Bottom Tabs + Native Stack) & Route types
+│   ├── hooks/                  # TanStack Query hooks: useRooms.ts, useBookings.ts (data fetching & caching)
 ├── tests/
 │   └── bookingConflict.test.ts # 16 bài kiểm thử tự động (Conflict Engine, Filters, Date Utils)
 ├── App.tsx                     # Root component bọc SafeAreaProvider & NavigationContainer

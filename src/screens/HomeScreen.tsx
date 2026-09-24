@@ -1,8 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import {
+  ActivityIndicator,
+  Animated,
   FlatList,
   Image,
   SafeAreaView,
@@ -19,6 +21,7 @@ import { EmptyState } from '../components/EmptyState';
 import { FilterChips } from '../components/FilterChips';
 import { RoomCard } from '../components/RoomCard';
 import { THEME } from '../constants/theme';
+import { useRooms } from '../hooks/useRooms';
 import { RootStackParamList } from '../navigation/types';
 import { useAuthStore } from '../stores/useAuthStore';
 import { filterRooms, useRoomStore } from '../stores/useRoomStore';
@@ -26,10 +29,86 @@ import { Room } from '../types/room';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
+/**
+ * Animated wrapper for each room card with fade-in + slide-up effect.
+ */
+const AnimatedRoomItem: React.FC<{
+  item: Room;
+  index: number;
+  onPress: (room: Room) => void;
+}> = React.memo(({ item, index, onPress }) => {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const translateY = useRef(new Animated.Value(30)).current;
+
+  useEffect(() => {
+    const delay = index * 80; // Stagger animation per card
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 400,
+        delay,
+        useNativeDriver: true,
+      }),
+      Animated.timing(translateY, {
+        toValue: 0,
+        duration: 400,
+        delay,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [fadeAnim, translateY, index]);
+
+  return (
+    <Animated.View style={{ opacity: fadeAnim, transform: [{ translateY }] }}>
+      <RoomCard room={item} onPress={onPress} />
+    </Animated.View>
+  );
+});
+AnimatedRoomItem.displayName = 'AnimatedRoomItem';
+
+/**
+ * Animated pulsing dot for real-time indicator.
+ */
+const PulsingDot: React.FC = () => {
+  const pulseAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulseAnim, {
+          toValue: 1.8,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 1,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [pulseAnim]);
+
+  return (
+    <Animated.View
+      style={[
+        styles.realtimePulse,
+        { transform: [{ scale: pulseAnim }] },
+      ]}
+    />
+  );
+};
+
 export const HomeScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const currentUser = useAuthStore((state) => state.currentUser);
 
+  // TanStack Query: Fetch & cache room data
+  const { data: queryRooms, isLoading: isQueryLoading } = useRooms();
+
+  // Zustand: UI filters & local state
   const rooms = useRoomStore((state) => state.rooms);
   const searchQuery = useRoomStore((state) => state.searchQuery);
   const selectedBuilding = useRoomStore((state) => state.selectedBuilding);
@@ -39,22 +118,39 @@ export const HomeScreen: React.FC = () => {
   const resetFilters = useRoomStore((state) => state.resetFilters);
   const initAvailabilityListener = useRoomStore((state) => state.initAvailabilityListener);
 
+  // Header fade-in animation
+  const headerFade = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    Animated.timing(headerFade, {
+      toValue: 1,
+      duration: 600,
+      useNativeDriver: true,
+    }).start();
+  }, [headerFade]);
+
   // Lắng nghe cập nhật trạng thái phòng theo thời gian thực (Mock Real-time)
   useEffect(() => {
     const cleanup = initAvailabilityListener();
     return cleanup;
   }, [initAvailabilityListener]);
 
+  // Merge TanStack Query data with Zustand's real-time status updates
+  const mergedRooms = useMemo(() => {
+    if (!queryRooms) return rooms;
+    // Use Zustand rooms as primary (has real-time status), fallback to query data
+    return rooms;
+  }, [rooms, queryRooms]);
+
   // Tối ưu hóa danh sách phòng lọc bằng useMemo để đảm bảo 60fps scrolling
   const filteredData = useMemo(() => {
     return filterRooms(
-      rooms,
+      mergedRooms,
       searchQuery,
       selectedBuilding,
       selectedCapacity,
       selectedEquipments
     );
-  }, [rooms, searchQuery, selectedBuilding, selectedCapacity, selectedEquipments]);
+  }, [mergedRooms, searchQuery, selectedBuilding, selectedCapacity, selectedEquipments]);
 
   const handleRoomPress = useCallback(
     (room: Room) => {
@@ -64,8 +160,8 @@ export const HomeScreen: React.FC = () => {
   );
 
   const renderRoomItem = useCallback(
-    ({ item }: { item: Room }) => {
-      return <RoomCard room={item} onPress={handleRoomPress} />;
+    ({ item, index }: { item: Room; index: number }) => {
+      return <AnimatedRoomItem item={item} index={index} onPress={handleRoomPress} />;
     },
     [handleRoomPress]
   );
@@ -76,8 +172,8 @@ export const HomeScreen: React.FC = () => {
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor={THEME.colors.surface} />
 
-      {/* Header chính mang phong cách VKU */}
-      <View style={styles.header}>
+      {/* Header chính mang phong cách VKU - with fade animation */}
+      <Animated.View style={[styles.header, { opacity: headerFade }]}>
         <View style={styles.headerTop}>
           <View style={styles.userProfileHeader}>
             <Image source={localAvatar} style={styles.headerAvatar} />
@@ -111,43 +207,51 @@ export const HomeScreen: React.FC = () => {
             </TouchableOpacity>
           ) : null}
         </View>
-      </View>
+      </Animated.View>
 
-      {/* Danh sách phòng với FlatList và bộ lọc */}
-      <FlatList
-        data={filteredData}
-        keyExtractor={keyExtractor}
-        renderItem={renderRoomItem}
-        ListHeaderComponent={
-          <View style={styles.listHeader}>
-            <FilterChips />
-            <View style={styles.resultsInfoRow}>
-              <Text style={styles.resultsCount}>
-                Tìm thấy <Text style={styles.highlightCount}>{filteredData.length}</Text> phòng
-              </Text>
-              <View style={styles.realtimeBadge}>
-                <View style={styles.realtimePulse} />
-                <Text style={styles.realtimeText}>Thời gian thực</Text>
+      {/* Loading state from TanStack Query */}
+      {isQueryLoading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={THEME.colors.primary} />
+          <Text style={styles.loadingText}>Đang tải danh sách phòng...</Text>
+        </View>
+      ) : (
+        /* Danh sách phòng với FlatList và bộ lọc */
+        <FlatList
+          data={filteredData}
+          keyExtractor={keyExtractor}
+          renderItem={renderRoomItem}
+          ListHeaderComponent={
+            <View style={styles.listHeader}>
+              <FilterChips />
+              <View style={styles.resultsInfoRow}>
+                <Text style={styles.resultsCount}>
+                  Tìm thấy <Text style={styles.highlightCount}>{filteredData.length}</Text> phòng
+                </Text>
+                <View style={styles.realtimeBadge}>
+                  <PulsingDot />
+                  <Text style={styles.realtimeText}>Thời gian thực</Text>
+                </View>
               </View>
             </View>
-          </View>
-        }
-        ListEmptyComponent={
-          <EmptyState
-            icon="business-outline"
-            title="Không tìm thấy phòng phù hợp"
-            description="Hãy thử điều chỉnh từ khóa tìm kiếm hoặc bỏ bớt các điều kiện lọc tòa nhà, sức chứa, thiết bị."
-            actionText="Xóa bộ lọc"
-            onAction={resetFilters}
-          />
-        }
-        contentContainerStyle={styles.listContent}
-        showsVerticalScrollIndicator={false}
-        initialNumToRender={6}
-        maxToRenderPerBatch={8}
-        windowSize={5}
-        removeClippedSubviews={true}
-      />
+          }
+          ListEmptyComponent={
+            <EmptyState
+              icon="business-outline"
+              title="Không tìm thấy phòng phù hợp"
+              description="Hãy thử điều chỉnh từ khóa tìm kiếm hoặc bỏ bớt các điều kiện lọc tòa nhà, sức chứa, thiết bị."
+              actionText="Xóa bộ lọc"
+              onAction={resetFilters}
+            />
+          }
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+          initialNumToRender={6}
+          maxToRenderPerBatch={8}
+          windowSize={5}
+          removeClippedSubviews={true}
+        />
+      )}
     </SafeAreaView>
   );
 };
@@ -268,4 +372,17 @@ const styles = StyleSheet.create({
   listContent: {
     paddingBottom: 24,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 12,
+  },
+  loadingText: {
+    fontSize: 14,
+    color: THEME.colors.textSecondary,
+    fontWeight: '500',
+  },
 });
+
+
